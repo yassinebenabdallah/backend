@@ -44,7 +44,7 @@ const getAllExample = async (req, res) => {
             return res.status(204).send(); // No content
         }
 
-        return res.status(200).json({ payload: examples });
+        return res.status(200).json(examples);
     } catch (error) {
         handleError(res, error, "Error in getting all examples", 500);
     }
