@@ -9,8 +9,7 @@ const userSchema = new mongoose.Schema({
         minlength:6,
         validate: {
             validator: (value) => validator.isEmail(value),
-        }
-            
+        }  
     },
     password: {
         type: String,
@@ -28,4 +27,4 @@ const userSchema = new mongoose.Schema({
 });
 
 // Create and export the model
-export default mongoose.model("user", userSchema);
+export default mongoose.model("User", userSchema);
