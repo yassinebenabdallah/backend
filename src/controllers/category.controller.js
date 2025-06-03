@@ -1,5 +1,6 @@
 import Category from '../models/category.model.js'
 import handleError from '../middlewares/errors/handleError.js'
+import Product from "../models/product.model.js"
 
 const createCategory = async (req, res) => {
     try {
@@ -44,6 +45,7 @@ const updateCategory = async (req, res) => {
         const existingName = await Category.findOne({ name: req.body.name });
         if (existingName) {
             return handleError(res, null, "category with this name already exists", 409); }
+            
         const category = await Category.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!category) {
             return handleError(res, null, "No data found", 404);
@@ -54,16 +56,22 @@ const updateCategory = async (req, res) => {
     }
 };
 
-const deleteCategory = async (req, res) => {
+
+const deleteProductByCategoryId = async (req, res) => {
     try {
-        const category = await Category.findByIdAndDelete(req.params.id);
-        // TODO check if category is used in any product before deleting
-        if (!category) {
-            return handleError(res, null, "No category found", 404);
+        const categoryId = req.params.id;
+        const product = await Product.findOne({ category: categoryId });
+        if (product) {
+            return handleError(res, null, "You must delete all products in this category before deleting it", 400);
         }
-    return res.status(200).json({ payload: "category deleted" });
+
+        const category = await Category.findByIdAndDelete(categoryId);
+        if (!category) {
+            return handleError(res, null, "Category not found", 404);
+        }
+        return res.status(200).json({ message: "Category deleted successfully" });
     } catch (error) {
-        handleError(res, error, "Error in deleting category", 500);
+        return handleError(res, error, "An error occurred while deleting the category", 500);
     }
 };
 
@@ -72,7 +80,7 @@ const categoryController = {
     getOneCategory,
     getAllCategories,
     updateCategory,
-    deleteCategory,
+    deleteProductByCategoryId
 }
 
 export default categoryController
