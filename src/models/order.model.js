@@ -24,7 +24,7 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['pending', 'shipped', 'delivered'],
+    enum: ['pending', 'shipped', 'delivered','cancelled'],
     default: 'pending'
   },
   createdAt: {
@@ -33,4 +33,4 @@ const orderSchema = new mongoose.Schema({
   }
 });
 
-export default mongoose.model("order", orderSchema);
+export default mongoose.model("Order", orderSchema);
