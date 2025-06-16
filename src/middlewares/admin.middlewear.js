@@ -10,7 +10,6 @@ try {
 
   if (!user.isAdmin) {
             return handleError(res, null, "user is not admin ", 403);
-
   }
   next();
 
