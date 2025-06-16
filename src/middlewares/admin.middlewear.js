@@ -4,7 +4,6 @@ import handleError from "../middlewares/errors/handleError.js";
 const isAdmin = async (req,res,next)=>{
 try {
      const user = req.user;
-     console.log("****************", user)
    if (!user) {
             return handleError(res, null, "wrong authentification", 401);
   }
