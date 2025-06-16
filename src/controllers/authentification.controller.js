@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import handleError from "../middlewares/errors/handleError.js";
+import isAdmin from "../middlewares/admin.middlewear.js";
 
 dotenv.config();
 
@@ -23,7 +24,8 @@ try {
         password: hashedPassword,
     });
     await newUser.save();
-    const token = jwt.sign({ id: newUser._id }, SECRET_KEY, { expiresIn: '1d' });
+
+    const token = jwt.sign({ id: newUser._id, isAdmin: newUser.isAdmin }, SECRET_KEY, { expiresIn: '1d' });
     return res.status(201).json({
         newUser,
         token,
@@ -47,7 +49,7 @@ const login = async (req, res) => {
             return handleError(res, null, "Invalid email or password", 401);
         }
 
-        const token = jwt.sign({ id: existingUser._id }, SECRET_KEY, { expiresIn: '1d' });
+        const token = jwt.sign({ id: existingUser._id, isAdmin: existingUser.isAdmin }, SECRET_KEY, { expiresIn: '1d' });
         return res.status(200).json({
             existingUser,
             token

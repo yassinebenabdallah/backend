@@ -13,6 +13,17 @@ const createUser = async (req, res) => {
         if (existingEmail) {
             return handleError(res, null, "user with this email already exists", 409); // 409 Conflict
         }
+
+          if (!req.body.isAdmin) {
+              req.body.isAdmin = "false";
+            }
+        
+            if (
+              req.body.isAdmin !== "false" &&
+              req.body.isAdmin !== "true" ) {
+              return handleError(res, null, "invalid status", 400);
+            }
+        
         const newUser = new User(req.body);
         await newUser.save();
         return res.status(201).json({ payload: newUser });
