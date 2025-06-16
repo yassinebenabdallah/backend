@@ -15,7 +15,6 @@ try {
 
 } catch (error) {
         return handleError(res, null, "error server", 500);
-
 }
 
 }
